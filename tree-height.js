@@ -1,42 +1,39 @@
 var readline = require('readline');
-var lineNumber = 0;
-var listOfNumbers, keysToSearch;
-var r;
 
+let lineNumber = 0;
+let listOfNumbers;
+let numbersCount;
+let TREE_HEIGHT = {};
 
 process.stdin.setEncoding('utf8');
 
 var rl = readline.createInterface({
   input: process.stdin,
-  terminal: false
+  terminal: false,
 });
 
-rl.on('line', readLine);
+function strToInt(item) {
+  return parseInt(item, 10);
+}
 
 function readLine(line) {
-  if (line !== "\n") {
+  if (line !== '\n') {
     if (lineNumber === 0) {
-      listOfNumbers = line.toString().split(' ');
-      lineNumber++;
+      numbersCount = parseInt(line, 10);
+      lineNumber += 1;
     } else {
-      keysToSearch = line.toString().split(' ');
-      console.log(BINARY_SEARCH.calculate(listOfNumbers.map(strToInt), keysToSearch.map(strToInt)));
+      listOfNumbers = line.toString().split(' ');
+      console.log(TREE_HEIGHT.calculate(numbersCount, listOfNumbers.map(strToInt)));
       process.exit();
     }
   }
 }
 
-function strToInt(item) {
-  return parseInt(item,10)
-}
+rl.on('line', readLine);
 
-var BINARY_SEARCH = {} || BINARY_SEARCH;
-
-
-BINARY_SEARCH.calculate = function(listOfNumbers, keysToSearch) {
-  console.log('list:', listOfNumbers);
-  console.log('keys:', keysToSearch);
-  var results = [];
-  return results.join(" ");
+TREE_HEIGHT.calculate = function(count, listOfNumbers) {
+  console.log('count:', count);
+  console.log('keys:', listOfNumbers);
+  return 5;
 };
 
