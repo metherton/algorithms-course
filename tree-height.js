@@ -1,4 +1,4 @@
-var readline = require('readline');
+const readline = require('readline');
 
 let lineNumber = 0;
 let listOfNumbers;
@@ -32,8 +32,6 @@ function readLine(line) {
 rl.on('line', readLine);
 
 TREE_HEIGHT.calculate = function(count, listOfNumbers) {
-  //console.log('count:', count);
-  //console.log('keys:', listOfNumbers);
   if (count !== listOfNumbers.length) {
     console.log('Number of items in tree is different than expected..so exiting program');
   }
@@ -56,12 +54,6 @@ TREE_HEIGHT.calculate = function(count, listOfNumbers) {
       nodes[parentIndex].children.push(nodes[i]);
     }
   }
-
-//  console.log(nodes);
-//  console.log('root is: ', root);
-//   for (let i = 0; i < nodes[0].children.length; i++) {
-//     console.log('child: ', nodes[0].children[i]);
-//   }
 
   queue[writeIndex].node = nodes[root];
   queue[writeIndex].height = 1;
