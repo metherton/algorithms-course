@@ -23,10 +23,14 @@ function readLine(line) {
       lineNumber += 1;
     } else {
       listOfNumbers = line.toString().split(' ');
-      console.log(TREE_HEIGHT.calculate(numbersCount, listOfNumbers.map(strToInt)));
-      process.exit();
+      run();
     }
   }
+}
+
+function run() {
+  console.log(TREE_HEIGHT.calculate(numbersCount, listOfNumbers.map(strToInt)));
+  process.exit();
 }
 
 rl.on('line', readLine);
