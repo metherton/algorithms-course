@@ -77,6 +77,8 @@ NETWORK_PACKET_PROCESSOR.calculate = function(networkBuffParams, listOfPackets) 
    //        console.log('finishTimes after pop', finishTimes);
             finishTime = finishTimes[j];
           } else {
+            finishTime = undefined;
+            break;
             j += 1;
             finishTime = finishTimes[j];
   //         console.log('nothing to pop off this time');
