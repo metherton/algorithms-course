@@ -56,19 +56,19 @@ NETWORK_PACKET_PROCESSOR.calculate = function(networkBuffParams, listOfPackets) 
   let head = 0;
   for (let i = 0; i < networkBuffParams[1]; i += 1) {
     if (finishTimes.length === 0) {
-//     console.log('i:', i);
-//     console.log('push:', listOfPackets[i][0]);
+//    console.log('i:', i);
+//    console.log('push:', listOfPackets[i][0]);
       response.push(listOfPackets[i][0]);
       finishTimes.push(listOfPackets[i][0] + listOfPackets[i][1]);
       buffer.push(listOfPackets[i]);
       tail += 1;
     } else {
       for (let j = 0; j < finishTimes.length; j += 1) {
-//      console.log('finishTimes[j]', finishTimes[j]);
-//      console.log('listOfPackets[i][0]', listOfPackets[i][0]);
+ //    console.log('finishTimes[j]', finishTimes[j]);
+ //    console.log('listOfPackets[i][0]', listOfPackets[i][0]);
         
         if (finishTimes[j] <= listOfPackets[i][0]) {
-//        console.log('pop it off');
+ //      console.log('pop it off');
           finishTimes.pop();
           tail -= 1;
         }
@@ -76,11 +76,16 @@ NETWORK_PACKET_PROCESSOR.calculate = function(networkBuffParams, listOfPackets) 
       if (finishTimes.length === networkBuffParams[0]) {
         response.push(-1);
       } else {
-//      console.log('tail is', tail);
-        
-        finishTimes[tail] = (finishTimes[tail - 1] || 0) + listOfPackets[i][1];
+ //    console.log('tail is', tail);
+        let offset;
+        if (finishTimes.length === 0) {
+          offset = listOfPackets[i][0];
+        } else {
+          offset = finishTimes[tail - 1];
+        }
+        finishTimes[tail] = offset + listOfPackets[i][1];
         buffer.push(listOfPackets[i]);
-        response.push((finishTimes[tail - 1] || 0));
+        response.push(offset);
         tail += 1;
       }
     }
