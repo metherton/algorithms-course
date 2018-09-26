@@ -55,36 +55,83 @@ NETWORK_PACKET_PROCESSOR.calculate = function(networkBuffParams, listOfPackets) 
   let tail = 0;
   let head = 0;
   for (let i = 0; i < networkBuffParams[1]; i += 1) {
+   //   console.log('i:', i);
     if (finishTimes.length === 0) {
-//    console.log('i:', i);
-//    console.log('push:', listOfPackets[i][0]);
+ //  console.log('i:', i);
+ //  console.log('push:', listOfPackets[i][0]);
       response.push(listOfPackets[i][0]);
       finishTimes.push(listOfPackets[i][0] + listOfPackets[i][1]);
       buffer.push(listOfPackets[i]);
       tail += 1;
     } else {
-      for (let j = 0; j < finishTimes.length; j += 1) {
- //    console.log('finishTimes[j]', finishTimes[j]);
- //    console.log('listOfPackets[i][0]', listOfPackets[i][0]);
-        
-        if (finishTimes[j] <= listOfPackets[i][0]) {
- //      console.log('pop it off');
-          finishTimes.pop();
-          tail -= 1;
+    //   for (let j = 0; j < finishTimes.length; j += 1) {
+    // console.log('finishTimes[j]', finishTimes[j]);
+    // console.log('listOfPackets[i][0] is', listOfPackets[i][0]);
+    //
+    //     console.log('finishTimes at beginning of loop', finishTimes);
+    //
+    //
+    //     if (finishTimes[j] <= listOfPackets[i][0]) {
+    //   console.log('pop it off');
+    //       finishTimes.pop();
+    //       tail -= 1;
+    //       console.log('finishTimes after pop', finishTimes);
+    //     } else {
+    //       console.log('nothing to pop off this time');
+    //     }
+    //   }
+      if (finishTimes.length > 0) {
+        let j = 0;
+        let finishTime = finishTimes[j];
+        while (finishTime) {
+          if (finishTimes[j] <= listOfPackets[i][0]) {
+            finishTimes.splice(j, 1);
+            tail -= 1;
+      //      console.log('finishTimes after pop', finishTimes);
+            finishTime = finishTimes[j];
+          } else {
+            j += 1;
+            finishTime = finishTimes[j];
+      //      console.log('nothing to pop off this time');
+          }
         }
       }
+      // while ()
+      // for (let j = 0; j < finishTimes.length; j += 1) {
+      //   console.log('finishTimes[j]', finishTimes[j]);
+      //   console.log('listOfPackets[i][0] is', listOfPackets[i][0]);
+      //
+      //   console.log('finishTimes at beginning of loop', finishTimes);
+      //
+      //
+      //   if (finishTimes[j] <= listOfPackets[i][0]) {
+      //     console.log('pop it off');
+      //     finishTimes.pop();
+      //     tail -= 1;
+      //     console.log('finishTimes after pop', finishTimes);
+      //   } else {
+      //     console.log('nothing to pop off this time');
+      //   }
+      // }
+
       if (finishTimes.length === networkBuffParams[0]) {
+     //   console.log('buffer full');
         response.push(-1);
       } else {
- //    console.log('tail is', tail);
+    //    console.log('buffer not full');
+   // console.log('tail is', tail);
         let offset;
+   //     console.log('finishTimes in else', finishTimes);
         if (finishTimes.length === 0) {
           offset = listOfPackets[i][0];
         } else {
           offset = finishTimes[tail - 1];
         }
-        finishTimes[tail] = offset + listOfPackets[i][1];
+        let latestFinishTime = offset + listOfPackets[i][1];
+        finishTimes[tail] = latestFinishTime;
+  //      console.log('finishTimes after new update', finishTimes);
         buffer.push(listOfPackets[i]);
+    //    console.log('add response', offset);
         response.push(offset);
         tail += 1;
       }
