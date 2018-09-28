@@ -69,7 +69,7 @@ const packageProcessor = () => {
   let packageBuffer;
   let responses = [];
 
-  function readLine(line) {
+  readLine(line) {
     if (bufferSize === undefined) {
       const firstLine = line.toString().split(' ').map(strToInt);
       bufferSize = firstLine[0];
@@ -86,18 +86,18 @@ const packageProcessor = () => {
     }
   }
 
-  function strToInt(item) {
+  strToInt(item) {
     return parseInt(item, 10);
   }
 
-  function run() {
+  run() {
     for (let i = 0; i < numberOfIncomingNetworkPackets; i += 1) {
       responses.push(packageBuffer.process(listOfNetworkPackets[i]));
     }
     printResponses();    
   }
 
-  function printResponses() {
+  printResponses() {
     for (let i = 0; i < numberOfIncomingNetworkPackets; i += 1) {
       if (responses[i].dropped()) {
         console.log('-1');
