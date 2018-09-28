@@ -37,8 +37,12 @@ const buffer = (bufferSize) => {
       }
       // lets check if we can remove finishTimes which have already been processed
       let i = 0;
-      while (finishTimes[i] !== undefined && finishTimes[i] <= arrivalTime) {
-        finishTimes.splice(i, 1);
+      while (finishTimes[i] !== undefined) {
+        if (finishTimes[i] <= arrivalTime) {
+          finishTimes.splice(i, 1);
+        } else {
+          break;
+        }
       }
       // lets check if buffer is full .. if it is then we class packet as dropped
       if (finishTimes.length === bufferSize) {
@@ -69,7 +73,7 @@ const packageProcessor = () => {
   let packageBuffer;
   let responses = [];
 
-  readLine(line) {
+  function readLine(line) {
     if (bufferSize === undefined) {
       const firstLine = line.toString().split(' ').map(strToInt);
       bufferSize = firstLine[0];
@@ -86,18 +90,18 @@ const packageProcessor = () => {
     }
   }
 
-  strToInt(item) {
+  function strToInt(item) {
     return parseInt(item, 10);
   }
 
-  run() {
+  function run() {
     for (let i = 0; i < numberOfIncomingNetworkPackets; i += 1) {
       responses.push(packageBuffer.process(listOfNetworkPackets[i]));
     }
     printResponses();    
   }
 
-  printResponses() {
+  function printResponses() {
     for (let i = 0; i < numberOfIncomingNetworkPackets; i += 1) {
       if (responses[i].dropped()) {
         console.log('-1');
