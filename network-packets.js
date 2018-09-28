@@ -29,31 +29,32 @@ const buffer = (bufferSize) => {
     },
     process: (request) => {
       // if buffer is empty then just return the start time of this packet & store finish time for this packet
+      let arrivalTime = request.arrivalTime();
+      let processTime = request.processTime();
       if (finishTimes.length === 0) {
-        finishTimes.push(request.arrivalTime() + request.processTime());
-        return response(false, request.arrivalTime());
+        finishTimes.push(arrivalTime + processTime);
+        return response(false, arrivalTime);
       }
       // lets check if we can remove finishTimes which have already been processed
       let i = 0;
-      while (finishTimes[i] !== undefined && finishTimes[i] < request.arrivalTime()) {
+      while (finishTimes[i] !== undefined && finishTimes[i] <= arrivalTime) {
         finishTimes.splice(i, 1);
-        i += 1;
       }
       // lets check if buffer is full .. if it is then we class packet as dropped
       if (finishTimes.length === bufferSize) {
         return response(true, -1);
       } else {
+
         // lets figure out what the start time actually is for this packet
         let startTime;
         if (finishTimes.length === 0) {
-          return response(false, request.arrivalTime());
+          startTime = arrivalTime;
         } else {
           startTime = finishTimes[finishTimes.length - 1];
-          finishTimes.push(startTime + request.processTime());
-          return response(false, startTime);
         }
+        finishTimes.push(startTime + processTime);
+        return response(false, startTime);
       }
-      return response(false, -1);
     }
   };
 };
