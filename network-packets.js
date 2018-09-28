@@ -47,9 +47,11 @@ const buffer = (bufferSize) => {
 
         // lets figure out what the start time actually is for this packet
         let startTime;
+        // if nothing in buffer then start time is the start time of the request
         if (finishTimes.length === 0) {
           startTime = arrivalTime;
         } else {
+          // else start time is the latest finish time
           startTime = finishTimes[finishTimes.length - 1];
         }
         finishTimes.push(startTime + processTime);
